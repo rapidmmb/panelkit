@@ -3,7 +3,7 @@
 ## Installation
 
 ```shell
-compsoer require mmb/panelkit
+composer require mmb/panelkit
 ```
 
 ### Publish

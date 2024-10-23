@@ -11,7 +11,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Rapid\\Mmb\\Providers\\PanelKitServiceProvider"
+                "Rapid\\Mmb\\PanelKit\\Providers\\PanelKitServiceProvider"
             ]
         }
     },

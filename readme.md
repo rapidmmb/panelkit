@@ -112,7 +112,6 @@ Add handlers:
 ```php
 $handler->callback(LockMiddleAction::class),
 LockRequest::for('main'), // For each groups
-$handler->afterMiddles(HomeSection::class, 'main'),
 ```
 
 Use the section:

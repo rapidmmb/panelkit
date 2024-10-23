@@ -137,6 +137,53 @@ Adding the `required` to custom part of code:
 LockRequest::for('main')->required();
 ```
 
+
+### Fixed Channels
+
+Change the config:
+
+```php
+    'lock' => [
+        'fixed' => [
+            [
+                'chat_id' => -123455678,
+                'title' => 'Join',
+                'url' => 'https://t.me/Link',
+                'group' => 'main',
+            ],
+        ],
+    ],
+```
+
+
+### Lock Condition
+
+```php
+class UserIsOddCondition implements LockCondition
+{
+    public function show() : bool
+    {
+        return BotUser::current()->id % 2 == 1;
+    }
+}
+```
+
+Set globally condition in config:
+
+```php
+    'lock' => [
+        'condition' => UserIsOddCondition::class,
+    ],
+```
+
+Or set in specific request:
+
+```php
+LockRequest::for('main')->withCondition(UserIsOddCondition::class)
+```
+
+
+
 ### Customize
 
 Custom the alert dialog:

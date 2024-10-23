@@ -16,18 +16,48 @@ class LockRequest extends Section implements UpdateHandling
 {
     use CallbackControl;
 
+    protected LockCondition $condition;
+
+    /**
+     * Set the condition
+     *
+     * @param LockCondition|string $condition
+     * @return $this
+     */
+    public function withCondition(LockCondition|string $condition)
+    {
+        $this->condition = is_string($condition) ? new $condition : $condition;
+        return $this;
+    }
+
+
     public string $group;
 
     protected array|false $locks;
 
     public function isRequired(): bool
     {
-        if (false !== $this->locks = Lock::checkLocks($this->group, $this->update))
+        $this->checkLocks(true);
+
+        if ($this->locks !== false)
         {
             return true;
         }
 
         return false;
+    }
+
+    protected function checkLocks(bool $force = false)
+    {
+        if (!isset($this->locks))
+        {
+            if (($this->condition ?? Lock::getCondition($this->group))?->show() === false)
+            {
+                $this->locks = false;
+            }
+
+            $this->locks = Lock::checkLocks($this->group, $this->update);
+        }
     }
 
     public function main()
@@ -40,7 +70,7 @@ class LockRequest extends Section implements UpdateHandling
     {
         $dialog->with('group');
 
-        $this->locks ??= Lock::checkLocks($this->group, $this->update);
+        $this->checkLocks();
         $submit = __('panelkit::lock.submit');
 
         if ($dialog->isCreating())

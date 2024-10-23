@@ -69,7 +69,11 @@ class Lock
             }
         }
 
-        foreach (config('panelkit.lock.fixed', []) as $info)
+        foreach (
+            collect(config('panelkit.lock.fixed', []))
+                ->whereInStrict('group', [null, $group])
+            as $info
+        )
         {
             switch (static::checkJoiningIn($info['chat_id'], $update))
             {
@@ -156,10 +160,17 @@ class Lock
 
             return $member->isJoined ? self::RELEASED : self::LOCKED;
         }
-        catch (\Throwable $e)
+        catch (\Throwable)
         {
             return self::VISIBLE_RELEASED;
         }
+    }
+
+    public static function getCondition(string $group) : ?LockCondition
+    {
+        $class = config('panelkit.lock.condition');
+
+        return $class ? new $class : null;
     }
 
 }

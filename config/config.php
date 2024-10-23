@@ -24,11 +24,13 @@ return [
         'groups' => [
             'main' => 'panelkit::lock.groups.main',
         ],
+        'condition' => null,
         'fixed' => [
             // [
             //     'chat_id' => -123455678,
             //     'title' => 'Join',
             //     'url' => 'https://t.me/Link',
+            //     'group' => 'main',
             // ],
         ],
     ],

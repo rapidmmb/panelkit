@@ -4,11 +4,13 @@ namespace Rapid\Mmb\PanelKit\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Rapid\Laplus\Label\HasLabels;
+
 // use Rapid\Mmb\PanelKit\Database\Factories\LockRequireFactory;
 
 class LockRequire extends Model
 {
-    use HasFactory;
+    use HasFactory, HasLabels;
 
     protected $fillable = [
         'group',

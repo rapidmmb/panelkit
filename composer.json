@@ -29,7 +29,7 @@
     },
     "require": {
         "laravel/framework": "^11.0",
-        "mmb/mmb": "*",
+        "mmb/mmb": "dev-context-sync",
         "rapid/laplus": "*"
     },
     "require-dev": {

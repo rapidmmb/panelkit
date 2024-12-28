@@ -25,14 +25,13 @@ class PanelKitFactory
     {
         $this->afterResolving(
             AreaRegister::class,
-            function (AreaRegister $register) use ($class, $method, $module)
-            {
+            function (AreaRegister $register) use ($class, $method, $module) {
                 $register->putForNamespace(
                     'Rapid\Mmb\PanelKit\Mmb\Sections' . ($module ? '\\' . $module : ''),
                     'back',
-                    [$class, $method]
+                    [$class, $method],
                 );
-            }
+            },
         );
     }
 
@@ -40,14 +39,13 @@ class PanelKitFactory
     {
         $this->afterResolving(
             AreaRegister::class,
-            function (AreaRegister $register) use ($class, $method, $module)
-            {
+            function (AreaRegister $register) use ($class, $method, $module) {
                 $register->putForNamespace(
                     'Rapid\Mmb\PanelKit\Mmb\Sections\Admin' . ($module ? '\\' . $module : ''),
                     'back',
-                    [$class, $method]
+                    [$class, $method],
                 );
-            }
+            },
         );
     }
 
@@ -56,8 +54,7 @@ class PanelKitFactory
     {
         app()->afterResolving($class, $callback);
 
-        if (app()->resolved(AreaRegister::class))
-        {
+        if (app()->resolved(AreaRegister::class)) {
             $callback(app(AreaRegister::class));
         }
     }

@@ -7,6 +7,7 @@ use Mmb\Action\Section\Controllers\CallbackControl;
 use Mmb\Action\Section\Dialog;
 use Mmb\Action\Section\Section;
 use Mmb\Action\Update\UpdateHandling;
+use Mmb\Context;
 use Mmb\Core\Updates\Update;
 use Mmb\Support\Format\KeyFormatter;
 use Mmb\Support\Telegram\Keys;
@@ -39,8 +40,7 @@ class LockRequest extends Section implements UpdateHandling
     {
         $this->checkLocks(true);
 
-        if ($this->locks !== false)
-        {
+        if ($this->locks !== false) {
             return true;
         }
 
@@ -49,10 +49,8 @@ class LockRequest extends Section implements UpdateHandling
 
     protected function checkLocks(bool $force = false)
     {
-        if (!isset($this->locks))
-        {
-            if (($this->condition ?? Lock::getCondition($this->group))?->show() === false)
-            {
+        if (!isset($this->locks)) {
+            if (($this->condition ?? Lock::getCondition($this->group))?->show() === false) {
                 $this->locks = false;
             }
 
@@ -73,74 +71,62 @@ class LockRequest extends Section implements UpdateHandling
         $this->checkLocks();
         $submit = __('panelkit::lock.submit');
 
-        if ($dialog->isCreating())
-        {
+        if ($dialog->isCreating()) {
             $dialog
                 ->schema(
                     KeyFormatter::value(
-                        function () use($dialog)
-                        {
-                            if ($this->locks)
-                            {
+                        function () use ($dialog) {
+                            if ($this->locks) {
                                 /** @var LockRequire $lock */
-                                foreach ($this->locks as $lock)
-                                {
+                                foreach ($this->locks as $lock) {
                                     yield [Keys::url($lock->title, $lock->url)];
                                 }
                             }
-                        }
-                    )
+                        },
+                    ),
                 );
         }
 
         $dialog
-            ->message(fn () => __('panelkit::lock.error', ['submit' => $submit]))
+            ->message(fn() => __('panelkit::lock.error', ['submit' => $submit]))
             ->schema(
                 [
                     [$dialog->keyId($submit, 'submit')],
-                ]
+                ],
             )
             ->on(
                 'submit',
-                function () use ($dialog)
-                {
-                    if ($this->locks)
-                    {
+                function () use ($dialog) {
+                    if ($this->locks) {
                         $this->tell(__('panelkit::lock.submit_invalid'), alert: true);
                         $dialog->reload();
-                    }
-                    else
-                    {
+                    } else {
                         $this->update->getMessage()?->delete(ignore: true);
                     }
-                }
+                },
             );
     }
 
-    public static function for(string $group)
+    public static function for(Context $context, string $group)
     {
-        $instance = static::make();
+        $instance = static::make($context);
         $instance->group = $group;
 
         return $instance;
     }
 
-    public function handleUpdate(Update $update)
+    public function handleUpdate(Context $context, Update $update)
     {
-        if ($this->isRequired())
-        {
+        if ($this->isRequired()) {
             $this->main();
-        }
-        else
-        {
+        } else {
             $update->skipHandler();
         }
     }
 
     public function required()
     {
-        if ($this->isRequired())
-        {
+        if ($this->isRequired()) {
             $this->main();
             $this->update->stopHandling();
         }

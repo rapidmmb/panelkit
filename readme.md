@@ -111,7 +111,7 @@ Add handlers:
 
 ```php
 $handler->callback(LockMiddleAction::class),
-LockRequest::for('main'), // For each groups
+LockRequest::for($this->context, 'main'), // For each groups
 ```
 
 Use the section:
@@ -134,7 +134,7 @@ $lock->delete(); // To delete the lock
 Adding the `required` to custom part of code:
 
 ```php
-LockRequest::for('main')->required();
+LockRequest::for($this->context, 'main')->required();
 ```
 
 
@@ -179,7 +179,7 @@ Set globally condition in config:
 Or set in specific request:
 
 ```php
-LockRequest::for('main')->withCondition(UserIsOddCondition::class)
+LockRequest::for($this->context, 'main')->withCondition(UserIsOddCondition::class)
 ```
 
 
@@ -228,7 +228,7 @@ class PostLockRequest extends LockRequest
 Usage:
 
 ```php
-LockRequest::for('main')->withPost($myPost)->required();
+PostLockRequest::for($this->context, 'main')->withPost($myPost)->required();
 ```
 
 
